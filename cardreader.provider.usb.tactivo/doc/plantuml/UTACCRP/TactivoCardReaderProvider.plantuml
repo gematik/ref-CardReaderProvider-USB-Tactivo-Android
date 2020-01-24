@@ -1,0 +1,14 @@
+@startuml
+
+    package de.gematik.ti.cardreader.provider.usb.tactivo.control {
+      class TactivoCardReaderProvider {
+          - providerDescriptor : ProviderDescriptor
+          + TactivoCardReaderProvider()
+          + getCardReaderController()
+          + getDescriptor()
+      }
+    }
+
+  TactivoCardReaderProvider -up-|> ICardReaderControllerProvider
+
+@enduml

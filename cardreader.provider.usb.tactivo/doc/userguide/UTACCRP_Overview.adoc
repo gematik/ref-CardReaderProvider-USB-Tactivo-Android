@@ -1,0 +1,227 @@
+include::config.adoc[]
+
+== Overview
+
+ifndef::useCachePlantuml[]
+
+.usbTactivoCardReaderProvider
+[plantuml, UTACCRP/generated/overview, png, caption="{classdia-caption} {counter:class}: ", 650]
+----
+include::{plantumldir}/UTACCRP/overview.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.usbTactivoCardReaderProvider
+image::UTACCRP/generated/overview.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+=== Integration
+The Tactivo USB CardReaderProvider needs a descriptor behind `YOUR.PROVIDER\src\main\resources\META-INF\services` with filename
+`de.gematik.ti.cardreader.provider.spi.ICardReaderControllerProvider` and the content of the package and class which implements the service provider interface
+`de.gematik.ti.cardreader.provider.usb.tactivo.control.TactivoCardReaderProvider`.
+
+== Hardware
+The integrated Precise Mobile Toolkit for Android SDK supports the integrating  of smart card and fingerprint functionality using Tactivo mini.
+
+== Additional Software
+To initialize a Tactivo cardReader, it is necessary to install the Tactivo Manager App on the device. (https://play.google.com/store/apps/details?id=com.precisebiometrics.android.mtk.manager&hl=gsw)
+
+== Control
+
+=== TactivoCardReaderProvider
+
+// tag::TactivoCardReaderProvider[]
+
+The TactivoCardReaderProvider class needs implementation of the interface 'ICardReaderControllerProvider' to handle listener and provide methods to inform connected listeners about card reader changes.
+
+ifndef::useCachePlantuml[]
+
+.TactivoCardReaderProvider
+[plantuml, UTACCRP/generated/TactivoCardReaderProvider, png, caption="{classdia-caption} {counter:class}: ", 300]
+----
+include::{plantumldir}/UTACCRP/TactivoCardReaderProvider.plantuml[]
+----
+
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.TactivoCardReaderProvider
+image::UTACCRP/generated/TactivoCardReaderProvider.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+// end::TactivoCardReaderProvider[]
+
+=== TactivoCardReaderController
+
+// tag::TactivoCardReaderController[]
+
+The TactivoCardReaderController extends the abstract class 'AbstractCardReaderController' to handle necessary permissions and checking if the application context is set. Returns a list with currently connected Tactivo cardReaders and informs about reader connection and disconnection.
+Additionally start and stop the controller for each TactivoCardReader the associated <<TactivoCardChecker>>.
+
+ifndef::useCachePlantuml[]
+
+.TactivoCardReaderController
+[plantuml, UTACCRP/generated/TactivoCardReaderController, png, caption="{classdia-caption} {counter:class}: ", 300]
+----
+include::{plantumldir}/UTACCRP/TactivoCardReaderController.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.TactivoCardReaderController
+image::UTACCRP/generated/TactivoCardReaderController.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+// end::TactivoCardReaderController[]
+
+
+=== TactivoCallback
+
+// tag::TactivoCallback[]
+
+The TactivoCallback class implements the PBInitializedCallback class from Precise Mobile Toolkit for Android SDK to connect and initialize Tactivo CardReader and extends the BroadCastReceiver class that receives and handles broadcast intents sent by {@link android.content.Context#sendBroadcast(Intent)}.
+The actions of the intents that are being handled are changes in the state of the usb device (attach / detach).
+
+ifndef::useCachePlantuml[]
+
+.TactivoCallback
+[plantuml, UTACCRP/generated/TactivoCallback, png, caption="{classdia-caption} {counter:class}: ", 300]
+----
+include::{plantumldir}/UTACCRP/TactivoCallback.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.TactivoCallback
+image::UTACCRP/generated/TactivoCallback.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+// end::TactivoCallback[]
+
+
+=== TactivoCardChecker
+
+// tag::TactivoCardChecker[]
+
+The TactivoCardChecker would automatically started for each connected TactivoCardReader to monitor the current card status. This checker send Events on EventBus for each
+present or absent card. For triggering this changed would use the SmartCardIo methods `waitForCardAbsent` and `waitForCardPresent`.
+
+ifndef::useCachePlantuml[]
+
+.TactivoCardChecker
+[plantuml, UTACCRP/generated/TactivoCardChecker, png, caption="{classdia-caption} {counter:class}: ", 300]
+----
+include::{plantumldir}/UTACCRP/TactivoCardChecker.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.TactivoCardChecker
+image::UTACCRP/generated/TactivoCardChecker.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+// end::TactivoCardChecker[]
+
+== Entities
+
+=== TactivoCardReader
+
+// tag::TactivoCardReader[]
+
+The Tactivo Smart Card Reader implements the Interface ICardReader.
+Works as adapter to the Precise Mobile Toolkit for Android SDK.
+
+ifndef::useCachePlantuml[]
+
+.TactivoCardReader
+[plantuml, UTACCRP/generated/TactivoCardReader, png, caption="{classdia-caption} {counter:class}: ", 300]
+----
+include::{plantumldir}/UTACCRP/TactivoCardReader.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.TactivoCardReader
+image::UTACCRP/generated/TactivoCardReader.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+// end::TactivoCardReader[]
+
+
+=== TactivoCard
+
+// tag::TactivoCard[]
+
+A Smart Card with which a connection has been established. TactivoCard extends the abstract class Card.
+Works as adapter to the Precise Mobile Toolkit for Android SDK.
+
+ifndef::useCachePlantuml[]
+
+.TactivoCard
+[plantuml, UTACCRP/generated/TactivoCard, png, caption="{classdia-caption} {counter:class}: ", 300]
+----
+include::{plantumldir}/UTACCRP/TactivoCard.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.TactivoCard
+image::UTACCRP/generated/TactivoCard.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+// end::TactivoCard[]
+
+
+=== TactivoCardChannel
+
+// tag::TactivoCardChannel[]
+
+A logical channel connection to a Smart Card. It is used to exchange APDUs with a Smart Card using USB Tactivo CardReader. A TactivoCardChannel object can be obtained by calling the method TactivoCard.getBasicChannel() or TactivoCard.openLogicalChannel().
+Works as adapter to the Precise Mobile Toolkit for Android SDK.
+
+ifndef::useCachePlantuml[]
+
+.TactivoCardChannel
+[plantuml, UTACCRP/generated/TactivoCardChannel, png, caption="{classdia-caption} {counter:class}: ", 300]
+----
+include::{plantumldir}/UTACCRP/TactivoCardChannel.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.TactivoCardChannel
+image::UTACCRP/generated/TactivoCardChannel.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+// end::TactivoCardChannel[]

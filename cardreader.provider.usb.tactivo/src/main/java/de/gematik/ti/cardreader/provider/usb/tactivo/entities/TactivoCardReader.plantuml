@@ -1,0 +1,22 @@
+@startuml
+
+    package de.gematik.ti.cardreader.provider.usb.tactivo.entities {
+      class TactivoCardReader {
+          - preciseTerminal : CardTerminal
+          - preciseCard : Card
+          {static} - PROTOCOL_T1 : String
+          + TactivoCardReader()
+          + initialize()
+          + isInitialized()
+          + connect()
+          + connect()
+          + getName()
+          + isCardPresent()
+          + waitForCardAbsent()
+          + waitForCardPresent()
+      }
+    }
+
+  TactivoCardReader -up-|> ICardReader
+
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+
+    package de.gematik.ti.cardreader.provider.usb.tactivo.entities {
+      class TactivoCardChannel {
+          - preciseChannel : CardChannel
+          + TactivoCardChannel()
+          + getCard()
+          + getChannelNumber()
+          + transmit()
+          + transmit()
+          + close()
+      }
+    }
+
+  TactivoCardChannel -up-|> CardChannel
+
+@enduml

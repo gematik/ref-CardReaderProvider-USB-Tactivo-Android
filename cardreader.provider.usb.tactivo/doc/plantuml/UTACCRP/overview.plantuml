@@ -1,0 +1,173 @@
+@startuml
+
+title __CARDREADER.PROVIDER.USB.TACTIVO's Class Diagram__\n
+
+  package de.gematik.ti.cardreader.provider.usb.tactivo {
+    package de.gematik.ti.cardreader.provider.usb.tactivo.control {
+      class TactivoCallback {
+          - context : Context
+          - ReaderId : int
+          ~ ReaderType : int
+          {static} - LOG : Logger
+          + TactivoCallback()
+          + connect()
+          + initializationFailed()
+          + initialized()
+          + uninitialized()
+          + onReceive()
+          - onDeviceDetached()
+          - onDeviceAttached()
+      }
+    }
+  }
+  
+
+  package de.gematik.ti.cardreader.provider.usb.tactivo {
+     package de.gematik.ti.cardreader.provider.usb.tactivo.control {
+       class TactivoCardReaderController {
+           {static} - instance : TactivoCardReaderController
+           - initialized : boolean
+           {static} - LOG : Logger
+           - callback : TactivoCallback
+           - mktInitializeCompleted : boolean
+           - waitForMktInit : CompletableFuture<Boolean>
+           - cardReaders : Collection<ICardReader>
+           - preciseTerminals : List<CardTerminal>
+           - newPreciseTerminals : List<CardTerminal>
+           - cardCheckerMap : Map<ICardReader, TactivoCardChecker>
+           - context : Context
+           - TactivoCardReaderController()
+           - init()
+           {static} + getInstance()
+           + getCardReaders()
+           - findPreciseTerminals()
+           ~ addNewAndInform()
+           ~ removeAndInform()
+           - findNewReaders()
+           # informAboutReaderConnection()
+           - findRemovedReaders()
+           - stopPreciseTerminalCardChecker()
+           + setContext()
+           - intitializeMKT()
+           ~ setMktInitializeCompleted()
+           - checkIfMktInitializeComplete()
+           - getPreciseTerminals()
+           - getNewPreciseTerminals()
+       }
+     }
+   }
+
+
+    package de.gematik.ti.cardreader.provider.api {
+        class CardEventTransmitter {
+            {static} - LOG : Logger
+            ~ CardEventTransmitter()
+            + informAboutCardPresent()
+            + informAboutCardAbsent()
+            + informAboutCardUnknown()
+            + informAboutCardTimeout()
+        }
+      }
+
+
+  package de.gematik.ti.cardreader.provider.usb.tactivo {
+    package de.gematik.ti.cardreader.provider.usb.tactivo.control {
+      class TactivoCardReaderProvider {
+          - providerDescriptor : ProviderDescriptor
+          + TactivoCardReaderProvider()
+          + getCardReaderController()
+          + getDescriptor()
+      }
+    }
+  }
+
+  package de.gematik.ti.cardreader.provider.usb.tactivo {
+      package de.gematik.ti.cardreader.provider.usb.tactivo.entities {
+        class TactivoCard {
+            - preciseCard : Card
+            - preciseATR : ATR
+            - channel : CardChannel
+            - preciseATRbyte : byte[]
+            - atr : ATR
+            + TactivoCard()
+            + getATR()
+            + getProtocol()
+            + getBasicChannel()
+            + openLogicalChannel()
+            + beginExclusive()
+            + endExclusive()
+            + transmitControlCommand()
+            + disconnect()
+        }
+      }
+    }
+
+
+    package de.gematik.ti.cardreader.provider.usb.tactivo {
+      package de.gematik.ti.cardreader.provider.usb.tactivo.entities {
+        class TactivoCardChannel {
+            - preciseChannel : CardChannel
+            + TactivoCardChannel()
+            + getCard()
+            + getChannelNumber()
+            + transmit()
+            + transmit()
+            + close()
+        }
+      }
+    }
+
+
+    package de.gematik.ti.cardreader.provider.usb.tactivo {
+      package de.gematik.ti.cardreader.provider.usb.tactivo.entities {
+        class TactivoCardReader {
+            - preciseTerminal : CardTerminal
+            - preciseCard : Card
+            {static} - PROTOCOL_T1 : String
+            + TactivoCardReader()
+            + initialize()
+            + isInitialized()
+            + connect()
+            + connect()
+            + getName()
+            + isCardPresent()
+            + waitForCardAbsent()
+            + waitForCardPresent()
+        }
+      }
+    }
+
+  package de.gematik.ti.cardreader.provider.usb.tactivo {
+      package de.gematik.ti.cardreader.provider.usb.tactivo.control {
+        class TactivoCardChecker {
+            {static} - LOG : Logger
+            - cardReader : ICardReader
+            - active : boolean
+            {static} - TIMEOUT : int
+            - cardEventTransmitter : CardEventTransmitter
+            - currentCardState : boolean
+            + TactivoCardChecker()
+            + shutdown()
+            + run()
+            - checkCardStateAndSendEvent()
+            - isCardPresent()
+        }
+      }
+    }
+  
+  TactivoCallback -up-|> PBInitializedCallback
+  TactivoCallback -up-|> BroadcastReceiver
+  TactivoCallback o-- TactivoCardReaderController : controller
+  TactivoCardReaderController -up-|> AbstractAndroidCardReaderController
+  TactivoCardReaderController o-- TactivoCallback : callback
+  TactivoCardChecker o-- TactivoCardReaderController
+  TactivoCardReader o-- TactivoCardReaderController
+  TactivoCardChecker ..> CardEventTransmitter : sendEvents
+  TactivoCardReaderController --o TactivoCardReaderProvider
+  TactivoCardReaderProvider -up-|> ICardReaderControllerProvider
+  TactivoCard -up-|> Card
+  TactivoCardChannel -up-|> CardChannel
+  TactivoCardChannel o-- TactivoCard : tactivoCard
+  TactivoCardReader -up-|> ICardReader
+
+@enduml

@@ -1,0 +1,8 @@
+include::config.adoc[]
+== License
+
+Licensed under the https://www.apache.org/licenses/LICENSE-2.0[Apache License, Version 2.0].
+
+The USB Tactivo CardReader provider uses the Precise Mobile Toolkit for Android SDK developed by Precise Biometrics.
+This framework is provided by Precise Biometrics for use exclusively with Tactivo Card Reader, and is governed by the terms of use granted by license to
+users of the Tactivo Card Reader.

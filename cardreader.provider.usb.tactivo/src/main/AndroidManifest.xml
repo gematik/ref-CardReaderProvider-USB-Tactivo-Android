@@ -1,0 +1,5 @@
+<manifest package="de.gematik.ti.cardreader.provider.usb.tactivo"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-feature android:name="android.hardware.usb.host" />
+</manifest>

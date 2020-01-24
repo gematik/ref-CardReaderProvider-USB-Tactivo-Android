@@ -1,0 +1,40 @@
+@startuml
+
+    package de.gematik.ti.cardreader.provider.usb.tactivo {
+        package de.gematik.ti.cardreader.provider.usb.tactivo.control {
+          class TactivoCardReaderController {
+              {static} - instance : TactivoCardReaderController
+              - initialized : boolean
+              {static} - LOG : Logger
+              - callback : TactivoCallback
+              - mktInitializeCompleted : boolean
+              - waitForMktInit : CompletableFuture<Boolean>
+              - cardReaders : Collection<ICardReader>
+              - preciseTerminals : List<CardTerminal>
+              - newPreciseTerminals : List<CardTerminal>
+              - cardCheckerMap : Map<ICardReader, PreciseCardChecker>
+              - context : Context
+              - TactivoCardReaderController()
+              - init()
+              {static} + getInstance()
+              + getCardReaders()
+              - findPreciseTerminals()
+              ~ addNewAndInform()
+              ~ removeAndInform()
+              - findNewReaders()
+              # informAboutReaderConnection()
+              - findRemovedReaders()
+              - stopPreciseTerminalCardChecker()
+              + setContext()
+              - intitializeMKT()
+              ~ setMktInitializeCompleted()
+              - checkIfMktInitializeComplete()
+              - getPreciseTerminals()
+              - getNewPreciseTerminals()
+          }
+        }
+      }
+
+  TactivoCardReaderController -up-|> AbstractAndroidCardReaderController
+
+@enduml
